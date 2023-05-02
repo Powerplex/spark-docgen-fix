@@ -1,26 +1,44 @@
-# SPARK-UI
+# REPRODUCING THE BUG
 
-![release](https://github.com/adevinta/spark/workflows/release/badge.svg)
+1. `npm install` (It will build the leaf packages using lerna + vite)
+2. `npm run storybook:start` (I set it up so that only the broken doc is loaded)
+3. Try to open the Button docs page (or stories) => ERROR
 
-[Adevinta](https://www.adevinta.com/)'s React Design System.
+```
+ReferenceError: o is not defined
+    at http://localhost:6006/packages/components/icons/dist/index.mjs:587:2
+```
 
-## Contributing
+Somehow, docGen is trying to attach its `__docgenInfo` to undeclared variables.
 
-Feel like contributing? That's awesome! We have a [contributing guide](CONTRIBUTING.md) to help guide you.
+For example if we focus on a single import in the mjs file generated:
 
-## Code of Conduct
+```
+// 1. Name of the export is "df" after compilation.
+import {ToysProduct as df} from "/packages/components/icons/dist/icons/ToysProduct.mjs";
 
-Adevinta has adopted a [Code of Conduct](documentation/contributing/CodeOfConduct.mdx) that we expect project participants to adhere to. Please read the full text so that you can understand what actions will and will not be tolerated.
+export {df as ToysProduct}; 
 
-## Contributors and Maintainers
-
-- [Contributors](documentation/contributing/Contributors.md)
-- [Maintainers](documentation/contributing/Maintainers.md)
-
-## Browser support
-
-Browser support is declared within `package.json` file, and can be found in human readable format [here](https://browsersl.ist/#q=%3E+0.5%25+or+%3E+0.1%25+and+last+2+years%2C+not+dead%2C+not+Firefox+ESR%2C+not+and_qq+%3E+0%2C+not+and_uc+%3E+0%2C+not+and_ff+%3E0).
-
-## LICENSE
-
-[MIT](LICENSE)
+// 2. But here docgen tries to attach its data to "d" instead of "df"
+d.__docgenInfo = {
+    "description": "",
+    "methods": [],
+    "displayName": "ToysProduct",
+    "props": {
+        "fill": {
+            "defaultValue": {
+                "value": "\"currentColor\"",
+                "computed": false
+            },
+            "required": false
+        },
+        "stroke": {
+            "defaultValue": {
+                "value": "\"none\"",
+                "computed": false
+            },
+            "required": false
+        }
+    }
+};
+```

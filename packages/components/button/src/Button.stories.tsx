@@ -1,6 +1,7 @@
 import { Icon } from '@spark-ui/icon'
-import { Check } from '@spark-ui/icons/dist/icons/Check'
-import { FavoriteOutline } from '@spark-ui/icons/dist/icons/FavoriteOutline'
+// import { Check } from '@spark-ui/icons/dist/icons/Check' // works fine when loading storybook
+// import { FavoriteOutline } from '@spark-ui/icons/dist/icons/FavoriteOutline' // works fine when loading storybook
+import { Check, FavoriteOutline } from '@spark-ui/icons' // Causes an ERROR when Storybook loads the Button doc page or stories
 import { Meta, StoryFn } from '@storybook/react'
 import { type ComponentProps } from 'react'
 

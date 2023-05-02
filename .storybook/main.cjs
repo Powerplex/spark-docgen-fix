@@ -16,12 +16,9 @@ module.exports = {
       // ...And any other config you need to change...
     })
   },
-
   stories: [
-    '../documentation/getting-started/GettingStarted.mdx',
-    '../documentation/**/!(getting-started)/*.mdx',
-    '../packages/**/*.doc.mdx',
-    '../packages/**/*.stories.tsx',
+    '../packages/components/button/**/*.doc.mdx',
+    '../packages/components/button/**/*.stories.tsx',
   ],
   addons: [
     '@storybook/addon-links',
